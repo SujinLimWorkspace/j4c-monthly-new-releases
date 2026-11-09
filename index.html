@@ -78,7 +78,7 @@ a{color:var(--b)}
 .faqbody{padding:14px 16px;font-size:.85rem;color:var(--t);line-height:1.7}
 .faqbody ul{padding-left:18px;margin:5px 0}.faqbody li{margin-bottom:3px}
 .ctl{font-size:1.15rem;font-weight:700;margin:28px 0 16px}
-.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;max-width:860px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;max-width:1100px}
 .cc{background:var(--w);border:1px solid var(--bdr2);border-radius:var(--rl);padding:20px;box-shadow:var(--sh)}
 .ccicon{font-size:1.5rem;margin-bottom:10px}
 .cctl{font-size:.92rem;font-weight:700;margin-bottom:5px}
@@ -120,6 +120,16 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
 .tsec-body.open{display:block}
 /* adjusted tsh to remove old margin-left:auto from tcnt since tsh-arr takes right slot */
 .tcnt{margin-left:0;flex-shrink:0;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px;border:1.5px solid;background:#fff;white-space:nowrap}
+
+/* ── search bar ── */
+.search-area{background:var(--w);border-bottom:1px solid var(--bdr2);padding:10px 24px}
+.search-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.search-input{flex:1;max-width:460px;padding:8px 14px 8px 38px;border:1.5px solid var(--bdr);border-radius:24px;font-size:.86rem;font-family:inherit;outline:none;transition:border-color .18s;background-color:var(--bg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23556B82' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:13px center}
+.search-input:focus{border-color:var(--b);background-color:var(--w)}
+.search-input::placeholder{color:#A0AABB}
+.search-clear-btn{background:none;border:1.5px solid var(--bdr);border-radius:20px;color:var(--t2);cursor:pointer;font-size:.78rem;padding:5px 12px;display:none;white-space:nowrap;font-family:inherit;transition:all .18s}
+.search-clear-btn:hover{background:var(--bg);border-color:var(--b);color:var(--b)}
+.search-cnt{font-size:.78rem;color:var(--t2);padding:4px 0;font-weight:500}
 @media(max-width:600px){.hero-h{font-size:1.35rem}.fgrid{grid-template-columns:1fr}.main-nav-btn{font-size:.8rem;padding:12px 10px}.pname{display:none}.hero-right{width:100%;align-items:flex-start}}
 </style>
 </head>
@@ -135,12 +145,12 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
 <section class="hero">
   <div class="hero-i">
     <div class="hero-left">
-      <p class="hero-ey">New Releases · 2026 · February – September (CW40)</p>
+      <p class="hero-ey">New Releases · 2026 · February – October (CW43)</p>
       <h1 class="hero-h">SAP Joule for Consultants<br>새로운 기능 모아보기</h1>
       <p class="hero-s">월별 릴리스 노트 · 주제별 기능 탐색 · FAQ &amp; 문의</p>
       <div class="hstats">
-        <div class="hstat"><span class="hstat-n">8개월</span><span class="hstat-l">업데이트 기간 (2~9월)</span></div>
-        <div class="hstat"><span class="hstat-n">43개</span><span class="hstat-l">총 업데이트 항목</span></div>
+        <div class="hstat"><span class="hstat-n">9개월</span><span class="hstat-l">업데이트 기간 (2~10월)</span></div>
+        <div class="hstat"><span class="hstat-n">53개</span><span class="hstat-l">총 업데이트 항목</span></div>
         <div class="hstat"><span class="hstat-n">7가지</span><span class="hstat-l">주제 카테고리</span></div>
       </div>
     </div>
@@ -164,6 +174,13 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
     <button class="main-nav-btn" id="nav-faq" onclick="showV('faq',this)">❓ FAQ &amp; 문의</button>
   </div>
 </nav>
+<div class="search-area">
+  <div class="search-inner">
+    <input type="text" id="searchInput" class="search-input" placeholder="기능, 업데이트, 키워드 검색..." oninput="doSearch(this.value)" onkeydown="if(event.key==='Escape')clearSearch()">
+    <button id="searchClear" class="search-clear-btn" onclick="clearSearch()">✕ 초기화</button>
+    <span id="searchCnt" class="search-cnt"></span>
+  </div>
+</div>
 
 <div class="wrap">
 
@@ -177,7 +194,8 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
     <button class="mtab" id="mtab-jun" onclick="showM('jun')">6월</button>
     <button class="mtab" id="mtab-jul" onclick="showM('jul')">7월</button>
     <button class="mtab" id="mtab-aug" onclick="showM('aug')">8월</button>
-    <button class="mtab act" id="mtab-sep" onclick="showM('sep')">9월</button>
+    <button class="mtab" id="mtab-sep" onclick="showM('sep')">9월</button>
+    <button class="mtab act" id="mtab-oct" onclick="showM('oct')">10월</button>
   </div>
 
   <!-- ── 2월 ── -->
@@ -267,7 +285,7 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
   </div>
 
   <!-- ── 9월 ── -->
-  <div class="mpage" id="mp-sep">
+  <div class="mpage" id="mp-sep" style="display:none">
     <div class="mhero"><div class="mhbadge">9월</div><div><h2>2026년 9월 릴리스 노트 (CW40)</h2><p>아티팩트 생성 · 좌석 할당 조회 · 사용자 수준 분석 · SAP Activate 로드맵 · 신규 Expert 2종</p><span class="mcnt">6개 업데이트</span></div></div>
     <div class="fgrid">
       <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">아티팩트(Artifact) 생성 — Word · PowerPoint</h3></div><div class="fcb"><div class="fcd">대화에서 J4C에게 <b>Word(.docx)</b> 문서 및 <b>PowerPoint(.pptx)</b> 프레젠테이션 생성 요청 가능. 같은 대화 내에서 수정 요청 후 다운로드할 수 있습니다.</div><div class="fnote">⚠ 현재 이미지 및 차트는 지원되지 않습니다.</div></div></div>
@@ -279,11 +297,29 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
     </div>
   </div>
 
+
+  <!-- ── 10월 ── -->
+  <div class="mpage" id="mp-oct">
+    <div class="mhero"><div class="mhbadge">10월</div><div><h2>2026년 10월 릴리스 노트 (CW43)</h2><p>대화 활성 시간 연장 · 캔버스 · PDF/Word 이미지 지원 · Roadmap Explorer · SAP Activate Accelerators · 신규 관리 전문가 5종</p><span class="mcnt">10개 업데이트</span></div></div>
+    <div class="fgrid">
+      <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><h3 class="fct">대화 활성 시간 연장 (Extended Active Conversations)</h3></div><div class="fcb"><div class="fcd">대화는 이제 만료되기 전까지 <b>72시간</b> 동안 활성 상태를 유지합니다 (기존 8시간). 활성 스레드도 기존 50개에서 최대 <b>150개</b>까지 유지 가능합니다. 만료된 대화는 <b>"Resume with Context"</b> 버튼으로 맥락을 유지한 채 새 대화로 이어갈 수 있습니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">대화형 문서 편집을 위한 캔버스 (Canvas)</h3></div><div class="fcb"><div class="fcd">J4C에게 <b>캔버스 생성</b>을 요청하여 콘솔 내에서 문서를 작성하고 다듬을 수 있는 전용 작업 공간을 활용하세요. 대화의 전체 맥락을 유지하면서 실시간 편집이 가능하며, <b>버전 관리</b>를 통해 이전 초안으로 언제든지 돌아갈 수 있습니다. 완료 후 <b>.DOCX 및 Markdown</b> 형식으로 내보내기 가능합니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><h3 class="fct">파일 업로드 개선: PDF/Word 내 이미지 지원</h3></div><div class="fcb"><div class="fcd">일반 파일 업로드 및 전문가 파일 업로드 기능이 이제 <b>PDF 및 Word(.docx) 파일 내 이미지</b>를 인식합니다. J4C는 답변 시 텍스트와 함께 다이어그램·스크린샷·시각 자료도 함께 고려합니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">SAP Roadmap Explorer 데이터 제공</h3></div><div class="fcb"><div class="fcd">SAP Joule for Consultants에 <b>SAP Roadmap Explorer</b> 데이터가 추가되었습니다. 대화 내에서 직접 SAP의 계획된 혁신 및 최근 출시된 혁신을 질문하고, 고객 추천 사항을 SAP 제품 방향성에 맞출 수 있습니다. 제품·사업 영역·산업·기간별 필터링이 가능합니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">SAP Activate Accelerators 콘텐츠 제공</h3></div><div class="fcb"><div class="fcd">이제 <b>SAP Activate Accelerators</b> 콘텐츠에 접근 가능합니다. 자연어로 구현 액셀러레이터를 찾고·설명하고·적용하도록 Joule에 요청할 수 있어 SAP Activate Roadmap Viewer를 수동으로 검색할 필요가 없습니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">BDCQ-FI Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">SAP S/4HANA Cloud Public Edition 전문 <b>SAP 재무 프로세스 컨설턴트</b>. 고객별 재무 프로세스 설문지를 처리하여 비즈니스 요구사항을 식별·검증하고, SAP 모범 사례에 맞춘 스코프 항목·번들·종속성·구성 매개변수를 제공합니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">BDCQ-Sales Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">SAP S/4HANA Cloud Public Edition 전문 <b>SAP 영업 프로세스 컨설턴트</b>. 고객별 영업 프로세스 설문지를 처리하여 비즈니스 요구사항을 식별·검증하고, SAP 모범 사례에 맞춘 스코프 항목·번들·종속성·구성 매개변수를 제공합니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">Localization Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">법적 준수 및 규제 관련 주제를 안내하는 <b>SAP 현지화 전문가</b>. 글로벌/로컬 프로세스를 이해하며 출처가 검증된 정보를 제공합니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">SuccessFactors Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">Job Profile Builder 마이그레이션 및 Talent Intelligence Hub 업그레이드 전문 <b>시니어 SAP SuccessFactors 컨설턴트</b>. 마이그레이션 전제 조건·Check Tool 오류 분석·데이터 일관성·문제 해결 가이드를 제공합니다.</div></div></div>
+      <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><h3 class="fct">Tricentis Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">CLOUD(SaaS) 에디션을 위한 <b>Tosca SAP 테스트 자동화 전문가</b>. 테스트 엔지니어·테스트 아키텍트·QA 리드가 ECT, SolEx(STA), CALM 프로그램 전반에서 SAP 자동화 테스트를 구축하고 실행하도록 지원합니다.</div></div></div>
+    </div>
+  </div>
+
 </div><!-- /view-monthly -->
 
 <!-- ══════════════ VIEW: TOPIC ══════════════ -->
 <div class="view" id="view-topic">
-<div class="ibox"><span>💡</span><span>2월~9월 업데이트를 <b>7가지 주제</b>로 분류했습니다. 각 섹션에서 관련 업데이트를 한 번에 확인하세요.</span></div>
+<div class="ibox"><span>💡</span><span>2월~10월 업데이트를 <b>7가지 주제</b>로 분류했습니다. 각 섹션에서 관련 업데이트를 한 번에 확인하세요.</span></div>
 
 <div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #0070F2;background:#EBF5FE"><span class="ticon">🔗</span><div><h2 class="ttl" style="color:#0070F2">커스텀 지식 그라운딩</h2><p class="tds">조직 내부 문서를 J4C에 연결. 접근 제어·벤치마킹·파이프라인 설정.</p></div><span class="tcnt" style="color:#0070F2;border-color:#0070F2">5개</span></div>
 <div class="fgrid tgrid tsec-body">
@@ -304,7 +340,7 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">5월</span><h3 class="fct">전문가 워크스페이스 도움말 링크</h3></div><div class="fcb"><div class="fcd">Quick Link → <b>Open Expert Workspace in Console</b>에서 전문가 생성. Quick Link → <b>Show Experts</b>에서 선택 사용.</div></div></div>
 </div></div>
 
-<div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #00695C;background:#E0F2F1"><span class="ticon">📋</span><div><h2 class="ttl" style="color:#00695C">새 Expert 템플릿</h2><p class="tds">SAP 제공 사전 구성 전문가 템플릿 (유틸리티·리테일·부동산·관리회계·운송관리·자산회계 등).</p></div><span class="tcnt" style="color:#00695C;border-color:#00695C">8종</span></div>
+<div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #00695C;background:#E0F2F1"><span class="ticon">📋</span><div><h2 class="ttl" style="color:#00695C">새 Expert 템플릿</h2><p class="tds">SAP 제공 사전 구성 전문가 템플릿 (유틸리티·리테일·부동산·관리회계·운송관리·자산회계·BDCQ·현지화·SuccessFactors·Tricentis 등).</p></div><span class="tcnt" style="color:#00695C;border-color:#00695C">13종</span></div>
 <div class="fgrid tgrid tsec-body">
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">7월</span><h3 class="fct">유틸리티 Expert</h3></div><div class="fcb"><div class="fcd">SAP S/4HANA Utilities·IS-U 전문. Meter-to-Cash·장치관리·청구·FI-CA 포함.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">7월</span><h3 class="fct">직접 유통 Expert</h3></div><div class="fcb"><div class="fcd">DSD &amp; LMD(Last Mile Distribution) 전문. 방문계획·트럭적재·배송·노선정산 포함.</div></div></div>
@@ -314,18 +350,24 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">8월</span><h3 class="fct">관리 회계(Mgmt Accounting) Expert</h3></div><div class="fcb"><div class="fcd">원가관리·수익성 분석·제품원가 계산·Material Ledger·재무계획 전문.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">9월</span><h3 class="fct">운송 관리 Expert (Transportation Management)</h3></div><div class="fcb"><div class="fcd">도로·철도·해상·항공·복합 운송 시나리오의 SAP 운송 프로세스 end-to-end 지원. SAP S/4HANA TM 솔루션 설계·구성·구현·문제 해결·최적화.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">9월</span><h3 class="fct">자산 회계 Expert (Asset Accounting)</h3></div><div class="fcb"><div class="fcd">자산 취득·자본화·감가상각·이전·폐기·마이그레이션·기간 말 결산 포함 SAP 자산 회계 end-to-end 지원. SAP S/4HANA FI-AA, 병행 회계, 통합, UPA 특화.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">BDCQ-FI Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">SAP S/4HANA Cloud Public Edition 전문 <b>SAP 재무 프로세스 컨설턴트</b>. 고객별 재무 프로세스 설문지를 처리하여 비즈니스 요구사항을 식별·검증하고, SAP 모범 사례에 맞춘 스코프 항목·번들·종속성·구성 매개변수를 제공합니다.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">BDCQ-Sales Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">SAP S/4HANA Cloud Public Edition 전문 <b>SAP 영업 프로세스 컨설턴트</b>. 고객별 영업 프로세스 설문지를 처리하여 비즈니스 요구사항을 식별·검증하고, SAP 모범 사례에 맞춘 스코프 항목·번들·종속성·구성 매개변수를 제공합니다.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">Localization Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">법적 준수 및 규제 관련 주제를 안내하는 <b>SAP 현지화 전문가</b>. 글로벌/로컬 프로세스를 이해하며 출처가 검증된 정보를 제공합니다.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">SuccessFactors Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">Job Profile Builder 마이그레이션 및 Talent Intelligence Hub 업그레이드 전문 <b>시니어 SAP SuccessFactors 컨설턴트</b>. 마이그레이션 전제 조건·Check Tool 오류 분석·데이터 일관성·문제 해결 가이드를 제공합니다.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">Tricentis Expert (SAP 관리 전문가)</h3></div><div class="fcb"><div class="fcd">CLOUD(SaaS) 에디션을 위한 <b>Tosca SAP 테스트 자동화 전문가</b>. 테스트 엔지니어·테스트 아키텍트·QA 리드가 ECT, SolEx(STA), CALM 프로그램 전반에서 SAP 자동화 테스트를 구축하고 실행하도록 지원합니다.</div></div></div>
 </div></div>
 
-<div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #E65100;background:#FFF3E0"><span class="ticon">📎</span><div><h2 class="ttl" style="color:#E65100">파일 업로드 확장</h2><p class="tds">PDF·이미지·Word·Excel/CSV·.MD 등 지원 형식의 지속적 확장.</p></div><span class="tcnt" style="color:#E65100;border-color:#E65100">5개</span></div>
+<div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #E65100;background:#FFF3E0"><span class="ticon">📎</span><div><h2 class="ttl" style="color:#E65100">파일 업로드 확장</h2><p class="tds">PDF·이미지·Word·Excel/CSV·.MD 및 PDF/Word 내 이미지 지원 등 지속적 확장.</p></div><span class="tcnt" style="color:#E65100;border-color:#E65100">6개</span></div>
 <div class="fgrid tgrid tsec-body">
-  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">2월</span><h3 class="fct">PDF · TXT 파일 업로드</h3></div><div class="fcb"><div class="fcd">대화 창에서 직접 최대 10개 파일 업로드. 파일당 최대 10MB / 600,000자 / PDF 100페이지.</div></div></div>
-  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">3월</span><h3 class="fct">이미지 업로드 — PNG · JPEG · WEBP · HEIC · HEIF</h3></div><div class="fcb"><div class="fcd">최대 10MB / 최대 해상도 3072×3072px.</div><div class="fnote">⚠ PDF에 삽입된 이미지는 미지원.</div></div></div>
-  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">4월</span><h3 class="fct">Word 문서 — DOC · DOCX</h3></div><div class="fcb"><div class="fcd">최대 10MB / 100페이지 / 600,000자.</div><div class="fnote">⚠ 삽입된 이미지는 미지원.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">2월</span><h3 class="fct">PDF · TXT 파일 업로드</h3></div><div class="fcb"><div class="fcd">대화 창에서 직접 최대 10개 파일 업로드. 파일당 최대 10MB / 600,000자 / PDF 100페이지.</div><div class="fnote">ℹ PDF 파일 내 삽입된 이미지는 10월 업데이트로 지원됩니다.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">3월</span><h3 class="fct">이미지 업로드 — PNG · JPEG · WEBP · HEIC · HEIF</h3></div><div class="fcb"><div class="fcd">최대 10MB / 최대 해상도 3072×3072px.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">4월</span><h3 class="fct">Word 문서 — DOC · DOCX</h3></div><div class="fcb"><div class="fcd">최대 10MB / 100페이지 / 600,000자.</div><div class="fnote">ℹ Word 파일 내 삽입된 이미지는 10월 업데이트로 지원됩니다.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">7월</span><h3 class="fct">Excel · CSV — .XLSX · .CSV</h3></div><div class="fcb"><div class="fcd">파일 형식 변환 없이 스프레드시트 데이터를 대화에 활용. 파일당 최대 10MB.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">8월</span><h3 class="fct">마크다운 — .MD</h3></div><div class="fcb"><div class="fcd">대화 창 및 Expert Workspace에서 .MD 파일 직접 업로드. 파일당 최대 600,000자 / 10MB.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">PDF/Word 파일 내 이미지 인식 지원</h3></div><div class="fcb"><div class="fcd">PDF 및 Word(.docx) 파일 내 <b>이미지(다이어그램·스크린샷·시각 자료)를 자동 인식</b>합니다. J4C는 텍스트와 함께 이미지 콘텐츠도 함께 고려하여 더욱 정확한 답변을 제공합니다.</div></div></div>
 </div></div>
 
-<div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #1565C0;background:#E3F2FD"><span class="ticon">✨</span><div><h2 class="ttl" style="color:#1565C0">사용자 경험 (UX)</h2><p class="tds">인용 개선·대화 한도·프롬프트 편집·아티팩트 생성 등 전반적 UX 개선.</p></div><span class="tcnt" style="color:#1565C0;border-color:#1565C0">14개</span></div>
+<div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #1565C0;background:#E3F2FD"><span class="ticon">✨</span><div><h2 class="ttl" style="color:#1565C0">사용자 경험 (UX)</h2><p class="tds">인용 개선·대화 한도·프롬프트 편집·아티팩트 생성·캔버스 등 전반적 UX 개선.</p></div><span class="tcnt" style="color:#1565C0;border-color:#1565C0">15개</span></div>
 <div class="fgrid tgrid tsec-body">
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">2월</span><h3 class="fct">인용 가시성 향상</h3></div><div class="fcb"><div class="fcd">인용이 오른쪽 전용 패널로 이동, 인용 그룹화 기능 추가.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">3월</span><h3 class="fct">콘솔에서 직접 Joule 실행</h3></div><div class="fcb"><div class="fcd">콘솔 탐색 바의 Joule 아이콘으로 임베드 방식 실행. 앱 전환 불필요.</div></div></div>
@@ -333,14 +375,15 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">4월</span><h3 class="fct">프롬프트 즐겨찾기 &amp; 확장 뷰</h3></div><div class="fcb"><div class="fcd">즐겨찾기 최대 25개. 라이브러리 표시 수 10→25개.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">4월</span><h3 class="fct">응답 손쉬운 복사 (URL 포함)</h3></div><div class="fcb"><div class="fcd">클릭 한 번으로 응답 복사. 출처 URL도 클릭 가능한 형태로 포함.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">6월</span><h3 class="fct">새로워진 환영 화면</h3></div><div class="fcb"><div class="fcd">환영 페이지 새 디자인. 시작이 쉽고 주요 기능 탐색 편리.</div></div></div>
-  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">6월</span><h3 class="fct">대화 제한 수 10개 → 50개</h3></div><div class="fcb"><div class="fcd">동시 활성 대화 50개로 증가. 여러 프로젝트·고객·주제 맥락 손실 없이 처리.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">활성 스레드 증가 — 최대 150개</h3></div><div class="fcb"><div class="fcd">동시에 유지할 수 있는 활성 스레드가 최대 <b>150개</b>로 증가 (기존 50개). 여러 프로젝트·고객·주제를 맥락 손실 없이 원활하게 처리할 수 있습니다.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">6월</span><h3 class="fct">답변 재시도 &amp; 프롬프트 편집</h3></div><div class="fcb"><div class="fcd"><b>재시도:</b> 수정 방향 입력 → 즉시 개선된 답변.<br><b>편집:</b> 원본 질문 직접 수정 가능.</div></div></div>
-  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">7월</span><h3 class="fct">대화 세션 만료 없음</h3></div><div class="fcb"><div class="fcd">대화 세션이 더 이상 만료되지 않아 이전 작업을 중단 없이 이어서 진행 가능.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">대화 활성 시간 연장 — 최대 72시간</h3></div><div class="fcb"><div class="fcd">대화 활성 시간이 기존 8시간에서 <b>72시간</b>으로 연장되었습니다. 만료된 대화는 <b>"Resume with Context"</b> 버튼으로 맥락을 유지한 채 새 대화로 이어갈 수 있습니다.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">7월</span><h3 class="fct">대화 시작 버튼 업데이트</h3></div><div class="fcb"><div class="fcd">What's New · Prompt Guide · My Experts 세 영역으로 클릭 한 번에 이동.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">7월</span><h3 class="fct">간결해진 답변 액션 &amp; 전체 릴리스 이력</h3></div><div class="fcb"><div class="fcd">액션 버튼 한 줄 통합. What's New에서 모든 과거 릴리스 확인 가능.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">8월</span><h3 class="fct">S-사용자 파란색 체크 표시</h3></div><div class="fcb"><div class="fcd">유효한 SAP S-사용자 연결 계정에 파란색 ✓ 자동 표시. 제한 콘텐츠 접근 가능.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">8월</span><h3 class="fct">커스텀 지침 AI 재작성 — Optimize 버튼</h3></div><div class="fcb"><div class="fcd">원하는 동작을 일반 언어로 설명 → Optimize → AI가 구조화된 지침 자동 생성.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">9월</span><h3 class="fct">아티팩트(Artifact) 생성 — Word · PowerPoint</h3></div><div class="fcb"><div class="fcd">대화에서 J4C에게 <b>Word(.docx)</b> 및 <b>PowerPoint(.pptx)</b> 파일 생성 요청 가능. 같은 대화 내에서 수정 후 다운로드.</div><div class="fnote">⚠ 현재 이미지·차트는 지원되지 않습니다.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">대화형 문서 편집을 위한 캔버스 (Canvas)</h3></div><div class="fcb"><div class="fcd">J4C에게 <b>캔버스 생성</b>을 요청하면 콘솔 내에서 문서를 작성·편집할 수 있는 전용 작업 공간이 열립니다. 대화의 전체 맥락을 유지하면서 실시간 편집이 가능하며, <b>버전 관리</b>로 이전 초안으로 돌아갈 수 있습니다. 완료 후 <b>.DOCX 및 Markdown</b> 형식으로 내보내기 가능합니다.</div></div></div>
 </div></div>
 
 <div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #BF360C;background:#FBE9E7"><span class="ticon">⚙️</span><div><h2 class="ttl" style="color:#BF360C">관리자 기능</h2><p class="tds">웹 검색 활성화·커스텀 프롬프트·사용자 수 제한·좌석 할당 조회·사용자 분석 등 관리자 전용 기능.</p></div><span class="tcnt" style="color:#BF360C;border-color:#BF360C">6개</span></div>
@@ -353,12 +396,13 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b badm">관리자</span><span class="b bmth">9월</span><h3 class="fct">사용자 수준 분석 (User Level Analytics)</h3></div><div class="fcb"><div class="fcd">테넌트 내 개별 사용자 사용 현황 확인 설정 활성화 가능. 두 가지 보고서 제공: <b>식별 가능 보고</b>(동의 사용자 현황) 및 <b>익명 보고</b>(미식별 사용자 현황).</div><div class="fnote">⚠ 활성화 이후부터만 수집 시작. 이전 기록은 제공되지 않습니다.</div></div></div>
 </div></div>
 
-<div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #37474F;background:#ECEFF1"><span class="ticon">📚</span><div><h2 class="ttl" style="color:#37474F">콘텐츠 업데이트</h2><p class="tds">EARL·ABAP 모델·SuccessFactors Best Practices·SAP Activate 로드맵 등 Joule 지식 콘텐츠 업데이트.</p></div><span class="tcnt" style="color:#37474F;border-color:#37474F">4개</span></div>
+<div class="tsec"><div class="tsh" onclick="toggleTopic(this)" style="border-left:4px solid #37474F;background:#ECEFF1"><span class="ticon">📚</span><div><h2 class="ttl" style="color:#37474F">콘텐츠 업데이트</h2><p class="tds">EARL·ABAP 모델·SuccessFactors Best Practices·SAP Activate·Roadmap Explorer 등 Joule 지식 콘텐츠 업데이트.</p></div><span class="tcnt" style="color:#37474F;border-color:#37474F">5개</span></div>
 <div class="fgrid tgrid tsec-body">
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b bmth">2월</span><h3 class="fct">EARL 콘텐츠 &amp; ABAP 모델 업데이트</h3></div><div class="fcb"><div class="fcd">SAP 엔터프라이즈 아키텍처 참조 라이브러리(EARL) 데이터 대화 활용 가능. SAP 최신 ABAP 모델 업데이트 포함.</div><div class="fnote">⚠ EARL 콘텐츠는 출처 목록에 표시되지 않습니다.</div></div></div>
-  <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b bmth">5월</span><h3 class="fct">콘텐츠 지속 업데이트</h3></div><div class="fcb"><div class="fcd">Joule 콘텐츠·사용성·전반적인 경험을 지속적으로 개선하는 업데이트.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bimp">개선 사항</span><span class="b ball">모든 사용자</span><span class="b bmth">8월</span><h3 class="fct">SAP SuccessFactors Best Practices</h3></div><div class="fcb"><div class="fcd">HCM 제품군 전반(Employee Central·채용·온보딩·성과&amp;목표·보상·학습·승계계획)의 검증된 구성·템플릿·구현 가이드 단일 접근점 제공.</div></div></div>
   <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">9월</span><h3 class="fct">SAP 액티베이트 로드맵 콘텐츠 추가</h3></div><div class="fcb"><div class="fcd">구현·시스템 전환 계획·실행을 돕는 추가 SAP Activate 로드맵 및 액셀러레이터 제공. 다루는 시나리오: <b>SAP S/4HANA Cloud Public Edition</b> · <b>RISE with SAP (Private Cloud)</b> · <b>On-premise</b>.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">SAP Roadmap Explorer 데이터 추가</h3></div><div class="fcb"><div class="fcd">대화 내에서 직접 <b>SAP Roadmap Explorer</b> 데이터를 조회할 수 있습니다. SAP의 계획된 혁신 및 최근 출시된 혁신을 질문하고, 고객 추천 사항을 SAP 제품 방향성에 맞출 수 있습니다. 제품·사업 영역·산업·기간별 필터링 지원.</div></div></div>
+  <div class="fc"><div class="fch"><span class="b bnew">새로운 기능</span><span class="b ball">모든 사용자</span><span class="b bmth">10월</span><h3 class="fct">SAP Activate Accelerators 콘텐츠 추가</h3></div><div class="fcb"><div class="fcd"><b>SAP Activate Accelerators</b> 콘텐츠에 접근 가능합니다. 자연어로 구현 액셀러레이터를 찾고·설명하고·적용하도록 Joule에 요청할 수 있어 SAP Activate Roadmap Viewer를 수동으로 검색할 필요가 없습니다.</div></div></div>
 </div></div>
 
 </div><!-- /view-topic -->
@@ -379,7 +423,8 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
 
 <div class="ctl">Contact &amp; 추가 리소스</div>
 <div class="cgrid">
-<div class="cc"><div class="ccicon">📧</div><div class="cctl">J4C 팀에 문의하기</div><div class="ccds">활성화, 기능, 오류 등 J4C 관련 모든 문의는 SAP Joule for Consultants 팀으로 연락하세요.</div><a class="cca" href="mailto:joule-for-consultants@sap.com">이메일 문의</a></div>
+<div class="cc"><div class="ccicon">📧</div><div class="cctl">J4C 팀에 문의하기</div><div class="ccds">SAP Joule for Consultants의 신기능·업데이트·활용 방법 등이 궁금하신가요? J4C 팀에 이메일로 문의하세요.</div><a class="cca" href="mailto:joule-for-consultants@sap.com">이메일 문의</a></div>
+<div class="cc"><div class="ccicon">🎫</div><div class="cctl">AI Factory 티켓 생성하기</div><div class="ccds">활성화 오류, 기능 문제, 설정 관련 기술적 이슈는 AI Factory에서 지원 티켓을 생성하세요.</div><a class="cca" href="https://intelligent-workplace.analytics.for.sap/experiences/csd-ai-factory-1/pages/main" target="_blank">AI Factory ↗</a></div>
 <div class="cc"><div class="ccicon">📖</div><div class="cctl">SAP Help Portal</div><div class="ccds">SAP Joule for Consultants의 공식 문서, 설정 가이드, What's New 섹션을 확인하세요.</div><a class="cca sec" href="https://help.sap.com/docs/joule/serviceguide/sap-consulting-capability-for-joule?locale=en-US" target="_blank">Help Portal ↗</a></div>
 <div class="cc"><div class="ccicon">💬</div><div class="cctl">SAP Community</div><div class="ccds">CKG E2E 설정 가이드, FAQ, 최신 블로그 포스트 등 커뮤니티 자료를 활용하세요.</div><a class="cca sec" href="https://community.sap.com" target="_blank">Community ↗</a></div>
 <div class="cc"><div class="ccicon">🎓</div><div class="cctl">SAP Learning</div><div class="ccds">Grounding, Expert 설정 등 심화 학습 콘텐츠는 SAP Learning 플랫폼에서 확인하세요.</div><a class="cca sec" href="https://learning.sap.com" target="_blank">Learning ↗</a></div>
@@ -397,8 +442,10 @@ footer{background:var(--t);color:rgba(255,255,255,.7);padding:24px;margin-top:32
 </footer>
 
 <script>
-var curM='sep';
+var curM='oct';
+var searchQ='';
 function showV(v,btn){
+  clearSearch();
   document.querySelectorAll('.view').forEach(function(e){e.classList.remove('act')});
   document.querySelectorAll('.main-nav-btn').forEach(function(e){e.classList.remove('act')});
   document.getElementById('view-'+v).classList.add('act');
@@ -413,6 +460,7 @@ function showM(id){
   var tb=document.getElementById('mtab-'+id);
   if(tb) tb.classList.add('act');
   curM=id;
+  if(searchQ) setTimeout(function(){doSearch(searchQ);},0);
 }
 function toggleTopic(tsh){
   var body=tsh.nextElementSibling;
@@ -425,6 +473,65 @@ function tFaq(i){
   var open=a.style.display==='block';
   a.style.display=open?'none':'block';
   ar.className='faqarr'+(open?'':' open');
+}
+
+function doSearch(q){
+  searchQ=q.trim().toLowerCase();
+  var clr=document.getElementById('searchClear');
+  var cnt=document.getElementById('searchCnt');
+  clr.style.display=searchQ?'inline-block':'none';
+  if(!searchQ){clearSearch();return;}
+  var total=0;
+  var av=document.querySelector('.view.act');
+  if(!av){cnt.style.display='none';return;}
+  if(av.id==='view-monthly'){
+    var pg=document.getElementById('mp-'+curM);
+    if(pg){pg.querySelectorAll('.fc').forEach(function(fc){
+      var m=fc.textContent.toLowerCase().indexOf(searchQ)>=0;
+      fc.style.display=m?'':'none';
+      if(m)total++;
+    });}
+  }else if(av.id==='view-topic'){
+    av.querySelectorAll('.tsec').forEach(function(sec){
+      var hit=false;
+      sec.querySelectorAll('.fc').forEach(function(fc){
+        var m=fc.textContent.toLowerCase().indexOf(searchQ)>=0;
+        fc.style.display=m?'':'none';
+        if(m){hit=true;total++;}
+      });
+      var body=sec.querySelector('.tsec-body');
+      var tsh=sec.querySelector('.tsh');
+      if(body&&tsh&&hit){body.classList.add('open');tsh.classList.add('open');}
+    });
+  }else if(av.id==='view-faq'){
+    av.querySelectorAll('.faqitem').forEach(function(item){
+      var m=item.textContent.toLowerCase().indexOf(searchQ)>=0;
+      item.style.display=m?'':'none';
+      if(m)total++;
+    });
+    av.querySelectorAll('.cc').forEach(function(cc){
+      var m=cc.textContent.toLowerCase().indexOf(searchQ)>=0;
+      cc.style.display=m?'':'none';
+      if(m)total++;
+    });
+  }
+  cnt.textContent=total>0?total+'개 항목 찾음':'결과 없음';
+  cnt.style.display='inline-block';
+}
+function clearSearch(){
+  searchQ='';
+  var inp=document.getElementById('searchInput');
+  if(inp)inp.value='';
+  var clr=document.getElementById('searchClear');
+  if(clr)clr.style.display='none';
+  var cnt=document.getElementById('searchCnt');
+  if(cnt)cnt.style.display='none';
+  document.querySelectorAll('.fc').forEach(function(fc){fc.style.display='';});
+  document.querySelectorAll('.faqitem').forEach(function(i){i.style.display='';});
+  document.querySelectorAll('.cc').forEach(function(c){c.style.display='';});
+  document.querySelectorAll('.tsec-body').forEach(function(b){b.classList.remove('open');});
+  document.querySelectorAll('.tsh').forEach(function(h){h.classList.remove('open');});
+  showM(curM);
 }
 </script>
 </body>
